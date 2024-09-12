@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            /* background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fcommunity.pokemon.com%2Fen-us%2F&psig=AOvVaw2mZhDm7FdOdwuFQmWO7NbC&ust=1726207343981000&source=images&cd=vfe&opi=89978449&ved=0CA4QjRxqFwoTCMCpwM7dvIgDFQAAAAAdAAAAABAE'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed;  */
+            color: white; 
+        }
+
+        #nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: black;
+            /* background-color: rgba(51, 51, 51, 0.8);  */
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #nav-bar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        #nav-bar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        #nav-bar a:hover {
+            color: #ffcc00;
+        }
+
+        @media (max-width: 768px) {
+            #nav-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            #nav-bar h1 {
+                margin-bottom: 10px;
+            }
+
+            #nav-bar a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        .intro {
+            padding: 20px;
+            text-align: center;
+            background-color: black;
+            /* background-color: rgba(0, 0, 0, 0.5);  */
+            border-radius: 10px; 
+            margin: 20px auto;
+            max-width: 800px; 
+        }
+
+        .intro h2 {
+            font-size: 28px;
+            color: #fff;
+            margin: 0 0 10px;
+        }
+
+        .intro p {
+            font-size: 18px;
+            color: #ddd;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav-bar">
+        <h1>Welcome to Pokemon Cards Store</h1>
+        <div>
+            <a href="products">Products</a>
+            <a href="contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="intro">
+        <h2>Discover the World of Pokemon Cards</h2>
+        <p>Welcome to the ultimate destination for Pokemon card enthusiasts. Whether you're a seasoned collector or just starting out, we offer a wide range of cards to suit your needs. Explore our extensive collection, find rare and exclusive cards, and enjoy a seamless shopping experience. Dive into the world of Pokemon and enhance your collection today!</p>
+    </div>
+</body>
+</html>

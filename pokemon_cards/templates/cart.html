@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{% csrf_token %}">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <a href="/home">&larr; Back to Products</a>
+    <h1>Your Cart</h1>
+    <ul id="cart_list">
+        {% if cart_items %}
+            {% for item in cart_items %}
+                <li class="cart_item" data-cart-item-id="{{ item.id }}">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100px; height: auto;">
+                    <h2>{{ item.product.name }}</h2>
+                    <p>Quantity: {{ item.quantity }}</p>
+                    <button class="remove-from-cart">Remove from Cart</button>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+    </ul>
+    
+    <!-- Include JavaScript for cart functionality -->
+    <script src="{% static 'js/cart.js' %}">
+        document.addEventListener('DOMContentLoaded', () => {
+    const cartItems = document.querySelectorAll('.cart_item');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    cartItems.forEach(item => {
+        const removeFromCartButton = item.querySelector('.remove-from-cart');
+        const cartItemId = item.getAttribute('data-cart-item-id');
+        
+        removeFromCartButton.addEventListener('click', () => {
+            fetch(`/cart/remove/${cartItemId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    item.remove(); 
+                }
+            });
+        });
+    });
+});
+    </script>
+</body>
+</html>

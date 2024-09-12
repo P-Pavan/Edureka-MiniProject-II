@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <meta name="csrf-token" content="{% csrf_token %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff; /* White background */
+            color: #000000; /* Black text color */
+        }
+
+        #nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text color */
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #nav-bar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        #nav-bar a:hover {
+            color: #cccccc; /* Light gray on hover */
+        }
+
+        #nav-bar .back-link {
+            font-size: 18px;
+            text-decoration: none;
+            color: #ffffff;
+            display: inline-block;
+            padding: 5px;
+        }
+
+        #nav-bar .back-link:hover {
+            color: #cccccc; /* Light gray on hover */
+        }
+
+        #products_list {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+            margin: 0;
+            padding: 20px;
+            gap: 20px; /* Gap between cards */
+        }
+
+        .product_card {
+            background-color: #ffffff; /* White background */
+            border: 1px solid #000000; /* Black border */
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            text-align: center;
+            width: 200px;
+            margin: 8px;
+        }
+
+        .product_card img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 8px;
+        }
+
+        .product_card h2 {
+            font-size: 18px;
+            margin: 8px 0;
+            color: #000000; /* Black text */
+        }
+
+        .product_card p {
+            font-size: 14px;
+            color: #666666; /* Dark gray text */
+        }
+
+        .product_card button {
+            margin-top: 8px;
+            padding: 8px 16px;
+            border: 1px solid #000000; /* Black border */
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #ffffff; /* White text color */
+            background-color: #000000; /* Black background */
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .product_card button:hover {
+            background-color: #333333; /* Dark gray on hover */
+            border-color: #333333; /* Dark gray border on hover */
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav-bar">
+        <h1>Our Pokemon Cards</h1>
+        <div>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'products' %}">Products</a>
+            <a href="{% url 'contact' %}">Contact</a>
+        </div>
+    </nav>
+    
+    <ul id="products_list">
+        {% for product in products %}
+            <li class="product_card" data-product-id="{{ product.id }}">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <button class="add-to-cart">Add to Cart</button>
+                <button class="remove-from-cart" style="display:none;">Remove from Cart</button>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productCards = document.querySelectorAll('.product_card');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            productCards.forEach(card => {
+                const addToCartButton = card.querySelector('.add-to-cart');
+                const removeFromCartButton = card.querySelector('.remove-from-cart');
+                const productId = card.getAttribute('data-product-id');
+
+                addToCartButton.addEventListener('click', () => {
+                    fetch(`/cart/add/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            addToCartButton.style.display = 'none';
+                            removeFromCartButton.style.display = 'inline';
+                        } else {
+                            console.error('Failed to add item to cart:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+
+                removeFromCartButton.addEventListener('click', () => {
+                    fetch(`/cart/remove/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            addToCartButton.style.display = 'inline';
+                            removeFromCartButton.style.display = 'none';
+                        } else {
+                            console.error('Failed to remove item from cart:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+    </script>
+</body>
+</html>
